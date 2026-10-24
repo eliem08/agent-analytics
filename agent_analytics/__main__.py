@@ -19,13 +19,17 @@ def main(argv=None):
             print(f"{name:<22} {op:<14} {intent}")
         return 0
 
-    fh = sys.stdin if a.logfile == "-" else open(a.logfile, encoding="utf-8", errors="replace")
-    with fh:
-        rep = analyze(fh)
+    if a.logfile == "-":
+        rep = analyze(sys.stdin)
+    else:
+        with open(a.logfile, encoding="utf-8", errors="replace") as fh:
+            rep = analyze(fh)
     if a.json:
         print(json.dumps(rep, indent=2))
         return 0
-    print(f"Total hits {rep['total_hits']:,} | agents {rep['agent_hits']:,} ({rep['agent_share']:.1%}) | humans {rep['human_hits']:,}")
+    print(
+        f"Total hits {rep['total_hits']:,} | agents {rep['agent_hits']:,} ({rep['agent_share']:.1%}) | humans {rep['human_hits']:,}"
+    )
     print("By intent: " + ", ".join(f"{k}={v}" for k, v in rep["by_intent"].items()))
     print()
     for ag in rep["agents"]:

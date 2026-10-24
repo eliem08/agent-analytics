@@ -1,8 +1,9 @@
 """Access-log parsing and AI-agent classification."""
+
 from __future__ import annotations
 
 import re
-from collections import Counter, defaultdict
+from collections import Counter
 from dataclasses import dataclass, field
 
 __all__ = ["AGENTS", "Hit", "parse_line", "classify", "analyze"]
@@ -36,14 +37,21 @@ AGENTS = [
     ("bingbot", "bingbot", "Microsoft", "search"),
 ]
 
-GENERIC_AUTOMATION = re.compile(r"bot|crawl|spider|agent|headless|python-requests|httpx|curl|wget|playwright|puppeteer", re.I)
+GENERIC_AUTOMATION = re.compile(
+    r"bot|crawl|spider|agent|headless|python-requests|httpx|curl|wget|playwright|puppeteer", re.I
+)
 
 LOG_RE = re.compile(
     r'(?P<ip>\S+) \S+ \S+ \[(?P<time>[^\]]+)\] "(?P<method>\S+) (?P<path>\S+)[^"]*" '
     r'(?P<status>\d{3}) (?P<bytes>\d+|-)(?: "(?P<ref>[^"]*)" "(?P<ua>[^"]*)")?'
 )
 
-SPECIAL_PATHS = {"/robots.txt": "robots.txt", "/llms.txt": "llms.txt", "/llms-full.txt": "llms.txt", "/sitemap.xml": "sitemap"}
+SPECIAL_PATHS = {
+    "/robots.txt": "robots.txt",
+    "/llms.txt": "llms.txt",
+    "/llms-full.txt": "llms.txt",
+    "/sitemap.xml": "sitemap",
+}
 
 
 @dataclass
@@ -92,12 +100,17 @@ class AgentStats:
 
     def to_dict(self, top=10):
         return {
-            "name": self.name, "operator": self.operator, "intent": self.intent,
-            "hits": self.hits, "bytes": self.bytes,
+            "name": self.name,
+            "operator": self.operator,
+            "intent": self.intent,
+            "hits": self.hits,
+            "bytes": self.bytes,
             "top_paths": self.paths.most_common(top),
-            "statuses": dict(self.statuses), "error_paths": self.errors.most_common(top),
+            "statuses": dict(self.statuses),
+            "error_paths": self.errors.most_common(top),
             "special_files": dict(self.special),
-            "first_seen": self.first_seen, "last_seen": self.last_seen,
+            "first_seen": self.first_seen,
+            "last_seen": self.last_seen,
         }
 
 
