@@ -1,11 +1,13 @@
 import argparse
+import csv
 import json
+import os
 import sys
 
 from .core import AGENTS, analyze
 
 
-def main(argv=None):
+def _run(argv=None):
     ap = argparse.ArgumentParser(prog="agent-analytics", description="AI agent traffic report from access logs.")
     sub = ap.add_subparsers(dest="cmd", required=True)
     r = sub.add_parser("report")
@@ -41,6 +43,23 @@ def main(argv=None):
         if ag["special_files"]:
             print("    fetched: " + ", ".join(f"{k} x{v}" for k, v in ag["special_files"].items()))
     return 0
+
+
+def main(argv=None):
+    """Run the CLI; a bad input file or argument exits 2 with a one-line error instead of a traceback.
+
+    Set AGENT_ECONOMY_DEBUG=1 to see the full traceback.
+    """
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(errors="replace")
+    try:
+        return _run(argv)
+    except (OSError, ValueError, KeyError, csv.Error) as e:
+        if os.environ.get("AGENT_ECONOMY_DEBUG"):
+            raise
+        msg = e.args[0] if isinstance(e, KeyError) and e.args else e
+        print(f"error: {msg}", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":
