@@ -118,6 +118,7 @@ def analyze(lines) -> dict:
     total = human = unparsed = 0
     agents: dict[str, AgentStats] = {}
     by_intent: Counter = Counter()
+    claims: dict[str, set] = {}  # ip -> named agents it claimed to be
     for line in lines:
         hit = parse_line(line.rstrip("\n"))
         if not hit:
@@ -129,6 +130,8 @@ def analyze(lines) -> dict:
             human += 1
             continue
         name, op, intent = c
+        if name != "unknown-automation":
+            claims.setdefault(hit.ip, set()).add(name)
         st = agents.get(name) or agents.setdefault(name, AgentStats(name, op, intent, first_seen=hit.time))
         st.hits += 1
         st.bytes += hit.bytes
@@ -150,4 +153,6 @@ def analyze(lines) -> dict:
         "unparsed_lines": unparsed,
         "by_intent": dict(by_intent),
         "agents": sorted((a.to_dict() for a in agents.values()), key=lambda d: -d["hits"]),
+        # user agents are self-declared; one IP wearing several vendors' bot names is almost certainly spoofing
+        "spoof_suspects": {ip: sorted(names) for ip, names in sorted(claims.items()) if len(names) > 1},
     }

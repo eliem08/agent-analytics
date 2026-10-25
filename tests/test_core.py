@@ -32,6 +32,16 @@ class Tests(unittest.TestCase):
         self.assertEqual(names["GPTBot"]["special_files"], {"robots.txt": 1})
         self.assertEqual(names["Claude-User"]["error_paths"], [("/docs/api", 1)])
         self.assertEqual(r["by_intent"]["user"], 1)
+        self.assertEqual(r["spoof_suspects"], {})
+
+    def test_one_ip_wearing_several_vendor_bot_names_is_flagged(self):
+        spoof = [
+            '9.9.9.9 - - [24/Oct/2026:11:00:00 +0000] "GET / HTTP/1.1" 200 1 "-" "GPTBot/1.2"',
+            '9.9.9.9 - - [24/Oct/2026:11:00:01 +0000] "GET / HTTP/1.1" 200 1 "-" "ClaudeBot/1.0"',
+            '9.9.9.9 - - [24/Oct/2026:11:00:02 +0000] "GET / HTTP/1.1" 200 1 "-" "PerplexityBot/1.0"',
+        ]
+        r = analyze(LOG + spoof)
+        self.assertEqual(r["spoof_suspects"], {"9.9.9.9": ["ClaudeBot", "GPTBot", "PerplexityBot"]})
 
 
 if __name__ == "__main__":

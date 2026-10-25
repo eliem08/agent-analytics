@@ -33,6 +33,8 @@ def _run(argv=None):
         f"Total hits {rep['total_hits']:,} | agents {rep['agent_hits']:,} ({rep['agent_share']:.1%}) | humans {rep['human_hits']:,}"
     )
     print("By intent: " + ", ".join(f"{k}={v}" for k, v in rep["by_intent"].items()))
+    for ip, names in rep["spoof_suspects"].items():
+        print(f"WARNING: {ip} claimed to be {len(names)} different agents ({', '.join(names)}) - likely spoofed")
     print()
     for ag in rep["agents"]:
         print(f"{ag['name']} ({ag['operator']}, {ag['intent']}): {ag['hits']} hits, {ag['bytes'] / 1e3:.1f} KB")
