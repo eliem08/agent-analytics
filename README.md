@@ -47,7 +47,7 @@ Every plan starts with a 14-day free trial. Prices in USD, billed monthly unless
 | **Pro** | $99 per month | 10 sites; Spoofing alerts; Error-path and llms.txt reports; CSV and JSON export |
 | **Business** | $399 per month | Unlimited sites; Custom agent signatures; Priority support |
 
-To start a trial or buy a plan, email **sales@YOUR-DOMAIN.com**.
+To start a trial or buy a plan, [request access](https://github.com/eliem08/agent-analytics/issues/new?title=Agent%20Analytics%20trial&labels=sales).
 
 ## Licence
 
