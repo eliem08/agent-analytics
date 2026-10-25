@@ -23,6 +23,7 @@ dev = ["ruff>=0.6"]
 
 [project.scripts]
 agent-analytics = "agent_analytics.__main__:main"
+agent-analytics-web = "agent_analytics.web:main"
 
 [project.urls]
 Repository = "https://github.com/eliem08/agent-analytics"

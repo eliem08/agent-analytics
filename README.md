@@ -22,6 +22,18 @@ agent-analytics report examples/access.log
 agent-analytics report examples/access.log --json
 ```
 
+## Web app and API
+
+Every command is also a JSON API endpoint and a browser form, served by the built-in web app.
+
+```bash
+agent-analytics-web --port 8000          # then open http://127.0.0.1:8000
+docker build -t agent-analytics . && docker run -p 8000:8000 -v agent-analytics-data:/data agent-analytics
+```
+
+Endpoints: `POST /api/report`, `POST /api/agents`, plus `GET /healthz` and `GET /api/spec` (machine-readable field list).
+Files are sent as `{"name": ..., "content": ...}`, folders as `{"files": [...]}` or a base64 zip.
+
 ## Pricing
 
 Every plan starts with a 14-day free trial. Prices in USD, billed monthly unless noted.

@@ -7,13 +7,18 @@ import sys
 from .core import AGENTS, analyze
 
 
-def _run(argv=None):
+def build_parser():
     ap = argparse.ArgumentParser(prog="agent-analytics", description="AI agent traffic report from access logs.")
     sub = ap.add_subparsers(dest="cmd", required=True)
     r = sub.add_parser("report")
     r.add_argument("logfile", help="access log path, or - for stdin")
     r.add_argument("--json", action="store_true")
     sub.add_parser("agents")
+    return ap
+
+
+def _run(argv=None):
+    ap = build_parser()
     a = ap.parse_args(argv)
 
     if a.cmd == "agents":
