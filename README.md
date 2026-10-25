@@ -1,16 +1,45 @@
-# agent-analytics
+<!-- sell-kit:start -->
+# Agent Analytics
 
 [![CI](https://github.com/eliem08/agent-analytics/actions/workflows/ci.yml/badge.svg)](https://github.com/eliem08/agent-analytics/actions/workflows/ci.yml)
 
-> **Google Analytics for agents** — see which AI agents visit your site and what they want.
+> **See which AI agents visit your site, what they read and where they fail.**
 
-Classic analytics drops bots on the floor. But a growing share of your
-"visitors" are AI agents: training crawlers, AI search indexers and
-user-triggered assistants fetching a page on someone's behalf. That traffic
-decides whether you show up in ChatGPT / Claude / Perplexity answers.
-`agent-analytics` turns raw access logs into an agent traffic report.
+**Who it's for:** Growth, SEO and content teams whose traffic is shifting to AI assistants.
 
-## What the MVP does
+**The problem:** AI crawlers and assistant browsers now read your site, but normal analytics lumps them in with bots or misses them entirely.
+
+**What you get:** Feed in your access logs and get every AI agent identified by operator and intent, the pages they fetch, the errors they hit and whether they read llms.txt.
+
+## Quickstart
+
+Customers receive a release archive with the wheel and the examples. Python 3.10+ and no other dependencies.
+
+```bash
+pip install agent_analytics-0.1.0-py3-none-any.whl
+agent-analytics agents
+agent-analytics report examples/access.log
+agent-analytics report examples/access.log --json
+```
+
+## Pricing
+
+Every plan starts with a 14-day free trial. Prices in USD, billed monthly unless noted.
+
+| Plan | Price | Includes |
+|---|---|---|
+| **Starter** | $29 per month | 1 site; Daily log reports; Agent and intent breakdown |
+| **Pro** | $99 per month | 10 sites; Spoofing alerts; Error-path and llms.txt reports; CSV and JSON export |
+| **Business** | $399 per month | Unlimited sites; Custom agent signatures; Priority support |
+
+To start a trial or buy a plan, email **sales@YOUR-DOMAIN.com**.
+
+## Licence
+
+Proprietary. Copyright (c) 2026 eliem08. All rights reserved. Use requires a paid plan or an active trial; see [LICENSE](LICENSE).
+<!-- sell-kit:end -->
+
+## What it does
 
 - Parses **Combined / Common Log Format** access logs (nginx, Apache, most CDNs)
 - Classifies hits against a catalogue of ~25 known AI agents with

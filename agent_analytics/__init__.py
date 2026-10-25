@@ -1,4 +1,4 @@
-"""Google Analytics for agents: see which AI agents visit your site and what they want."""
+"""Agent Analytics: See which AI agents visit your site, what they read and where they fail."""
 
 from .core import *
 

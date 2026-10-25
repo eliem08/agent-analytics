@@ -5,16 +5,17 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "agent-analytics"
 version = "0.1.0"
-description = "Google Analytics for agents: see which AI agents visit your site and what they want"
+description = "See which AI agents visit your site, what they read and where they fail."
 readme = "README.md"
 requires-python = ">=3.10"
-license = { text = "MIT" }
+license = { text = "Proprietary" }
 authors = [{ name = "eliem08" }]
 dependencies = []
 classifiers = [
   "Programming Language :: Python :: 3",
-  "License :: OSI Approved :: MIT License",
+  "License :: Other/Proprietary License",
   "Operating System :: OS Independent",
+  "Private :: Do Not Upload",
 ]
 
 [project.optional-dependencies]
