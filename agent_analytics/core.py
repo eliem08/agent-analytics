@@ -35,6 +35,20 @@ AGENTS = [
     ("Diffbot", "Diffbot", "Diffbot", "training"),
     ("FirecrawlAgent", "FirecrawlAgent", "Firecrawl", "user"),
     ("bingbot", "bingbot", "Microsoft", "search"),
+    # first match wins: these come after the longer names they are prefixes of (Applebot-Extended, cohere-ai)
+    ("Applebot", "Applebot", "Apple", "search"),
+    ("cohere-training-data-crawler", "cohere-training-data-crawler", "Cohere", "training"),
+    ("Ai2Bot-Dolma", "Ai2Bot-Dolma", "Allen AI", "training"),
+    ("AI2Bot", "AI2Bot", "Allen AI", "training"),
+    ("Google-CloudVertexBot", "Google-CloudVertexBot", "Google", "user"),
+    ("YandexAdditional", "YandexAdditional", "Yandex", "training"),
+    ("PetalBot", "PetalBot", "Huawei", "search"),
+    ("PanguBot", "PanguBot", "Huawei", "training"),
+    ("Timpibot", "Timpibot", "Timpi", "training"),
+    ("ImagesiftBot", "ImagesiftBot", "ImageSift", "training"),
+    ("omgili", "omgili", "Webz.io", "training"),
+    ("Kangaroo Bot", "Kangaroo Bot", "Kangaroo LLM", "training"),
+    ("iaskspider", "iaskspider", "iAsk.ai", "search"),
 ]
 
 GENERIC_AUTOMATION = re.compile(
