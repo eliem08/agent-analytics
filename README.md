@@ -76,7 +76,7 @@ Proprietary. Copyright (c) 2026 eliem08. All rights reserved. Use requires a pai
 ## What it does
 
 - Parses **Combined / Common Log Format** access logs (nginx, Apache, most CDNs)
-- Classifies hits against a catalogue of ~25 known AI agents with
+- Classifies hits against a catalogue of 38 known AI agents with
   **operator** and **intent** (`training`, `search`, `user` = live assistant fetch)
 - Flags unknown automation (`bot`, `agent`, `headless`, `python-requests`, …)
 - Reports per agent: hits, top paths, status codes, bytes, first/last seen
