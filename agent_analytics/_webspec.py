@@ -37,4 +37,24 @@ SPEC = {
         },
         {"prefix": ["agents"], "title": "Agents", "fields": [], "id": "agents"},
     ],
+    "plans": [
+        {
+            "key": "starter",
+            "name": "Starter",
+            "price": "$29 per month",
+            "features": ["1 site", "Log reports on demand", "Agent and intent breakdown"],
+        },
+        {
+            "key": "pro",
+            "name": "Pro",
+            "price": "$99 per month",
+            "features": ["10 sites", "Spoofing detection", "Error-path and llms.txt reports", "JSON export"],
+        },
+        {
+            "key": "business",
+            "name": "Business",
+            "price": "$399 per month",
+            "features": ["Unlimited sites", "Hosted API", "Priority support"],
+        },
+    ],
 }
