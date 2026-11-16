@@ -55,15 +55,18 @@ Buyers pick a plan on `/pricing`, pay on Stripe Checkout and see their API key o
 
 ## Pricing
 
-Every plan starts with a 14-day free trial. Prices in USD, billed monthly unless noted.
+Monthly plans start with a 14-day free trial. Prices in USD, billed monthly unless noted.
 
 | Plan | Price | Includes |
 |---|---|---|
-| **Starter** | $29 per month | 1 site; Daily log reports; Agent and intent breakdown |
-| **Pro** | $99 per month | 10 sites; Spoofing alerts; Error-path and llms.txt reports; CSV and JSON export |
-| **Business** | $399 per month | Unlimited sites; Custom agent signatures; Priority support |
+| **Starter** | $29 per month | 1 site; Log reports on demand; Agent and intent breakdown |
+| **Pro** | $99 per month | 10 sites; Spoofing detection; Error-path and llms.txt reports; JSON export |
+| **Business** | $399 per month | Unlimited sites; Hosted API; Priority support |
 
 To start a trial or buy a plan, [request access](https://github.com/eliem08/agent-analytics/issues/new?title=Agent%20Analytics%20trial&labels=sales).
+
+Plan note: every plan runs the same software, and every API key unlocks all of it. Seat, agent and volume
+limits are licence terms; the code does not enforce them. Support, SLA and done-for-you items are services.
 
 ## Licence
 
