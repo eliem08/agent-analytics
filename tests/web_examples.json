@@ -21,5 +21,11 @@
    },
    "json": true
   }
+ },
+ {
+  "op": "live-report",
+  "payload": {
+   "days": 7
+  }
  }
 ]

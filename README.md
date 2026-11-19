@@ -9,7 +9,7 @@
 
 **The problem:** AI crawlers and assistant browsers now read your site, but normal analytics lumps them in with bots or misses them entirely.
 
-**What you get:** Feed in your access logs and get every AI agent identified by operator and intent, the pages they fetch, the errors they hit and whether they read llms.txt.
+**What you get:** Feed in your access logs and get every AI agent identified by operator and intent, the pages they fetch, the errors they hit and whether they read llms.txt, from uploaded logs or a live feed your servers stream in.
 
 ## Quickstart
 
@@ -34,7 +34,7 @@ docker build -t agent-analytics . && docker run -p 8000:8000 -e API_KEYS=sk_... 
 
 Every API call needs `Authorization: Bearer <key>` once any key exists; a server on a public address refuses to start without one. Calls are rate-limited per key (60/min, `--rate`) and metered: `agent-analytics-web usage` prints calls per key for billing.
 
-Endpoints: `POST /api/report`, `POST /api/agents`, plus `GET /healthz` and `GET /api/spec` (machine-readable field list).
+Endpoints: `POST /api/report`, `POST /api/agents`, `POST /api/live-report`, plus `GET /healthz` and `GET /api/spec` (machine-readable field list).
 Files are sent as `{"name": ..., "content": ...}`, folders as `{"files": [...]}` or a base64 zip.
 
 ## Deploy and sell
@@ -60,7 +60,7 @@ Monthly plans start with a 14-day free trial. Prices in USD, billed monthly unle
 
 | Plan | Price | Includes |
 |---|---|---|
-| **Starter** | $29 per month | 1 site; Log reports on demand; Agent and intent breakdown |
+| **Starter** | $29 per month | 1 site; Log reports on demand; Live log feed; Agent and intent breakdown |
 | **Pro** | $99 per month | 10 sites; Spoofing detection; Error-path and llms.txt reports; JSON export |
 | **Business** | $399 per month | Unlimited sites; Hosted API; Priority support |
 
@@ -94,6 +94,27 @@ agent-analytics report /var/log/nginx/access.log
 agent-analytics report access.log --json > agents.json
 agent-analytics agents          # list the signature catalogue
 ```
+
+## Live feed
+
+Instead of uploading log files, stream them to the hosted server and report on any recent window:
+
+```bash
+# on your web server: follow the access log and send new lines every 5 seconds
+AGENT_ANALYTICS_KEY=sk_... agent-analytics ship /var/log/nginx/access.log --url https://aa.example.com
+# anywhere: the last 7 days of what was streamed in (also POST /api/live-report)
+agent-analytics live-report --days 7
+```
+
+- `POST /ingest` takes access-log lines as a plain-text body, with the same API keys, rate limit and monthly
+  quota as the rest of the API (one call per batch). It answers with how many lines it accepted and how many came
+  from AI agents.
+- Lines are kept as received, one file per UTC day, for `INGEST_RETAIN_DAYS` (default 90).
+- `ship` behaves like `tail -F`: it follows rotation and truncation and resends a batch after a network failure,
+  so nothing is lost. It opens the log only to read, so the web server can still rotate it, on Windows too.
+  `--once` sends the current file and stops.
+- Any program can post to `/ingest` directly: `curl -H "Authorization: Bearer sk_..." --data-binary @access.log
+  https://aa.example.com/ingest`.
 
 ## Roadmap
 

@@ -2,9 +2,11 @@ import argparse
 import csv
 import json
 import os
+import pathlib
 import sys
 
 from .core import AGENTS, analyze
+from .live import lines_since, ship
 
 
 def build_parser():
@@ -14,6 +16,17 @@ def build_parser():
     r.add_argument("logfile", help="access log path, or - for stdin")
     r.add_argument("--json", action="store_true")
     sub.add_parser("agents")
+    lr = sub.add_parser("live-report", help="report over the lines streamed in to the hosted /ingest endpoint")
+    lr.add_argument("--days", type=int, default=7, help="how many recent days (UTC) to include")
+    lr.add_argument("--store", default="ingest", help="the ingest folder (the hosted server pins its own)")
+    lr.add_argument("--json", action="store_true")
+    sh = sub.add_parser("ship", help="stream a server's access log to the hosted /ingest endpoint")
+    sh.add_argument("logfile")
+    sh.add_argument("--url", required=True, help="the hosted agent-analytics address, e.g. https://aa.example.com")
+    sh.add_argument("--key", default=os.environ.get("AGENT_ANALYTICS_KEY", ""), help="API key (or AGENT_ANALYTICS_KEY)")
+    sh.add_argument("--once", action="store_true", help="send what is in the file now, then stop")
+    sh.add_argument("--interval", type=float, default=5.0, help="seconds between sends while following")
+    sh.set_defaults(web=False)  # runs on the customer's server, not through the hosted API
     return ap
 
 
@@ -26,7 +39,23 @@ def _run(argv=None):
             print(f"{name:<22} {op:<14} {intent}")
         return 0
 
-    if a.logfile == "-":
+    if a.cmd == "ship":
+        if not a.key:
+            raise ValueError("an API key is needed: --key or AGENT_ANALYTICS_KEY")
+        print(f"shipping {a.logfile} to {a.url}" + (" (once)" if a.once else ", following; Ctrl+C to stop"))
+        try:
+            n = ship(a.logfile, a.url, a.key, once=a.once, interval=max(1.0, a.interval))
+        except KeyboardInterrupt:
+            return 0
+        print(f"sent {n:,} lines")
+        return 0
+    if a.cmd == "live-report":
+        if not 1 <= a.days <= 366:
+            raise ValueError("--days must be between 1 and 366")
+        rep = analyze(lines_since(pathlib.Path(a.store), a.days))
+        if not a.json:
+            print(f"last {a.days} day(s) of streamed logs")
+    elif a.logfile == "-":
         rep = analyze(sys.stdin)
     else:
         with open(a.logfile, encoding="utf-8", errors="replace") as fh:
